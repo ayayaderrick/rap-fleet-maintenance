@@ -64,8 +64,8 @@ The application follows the standard RAP layered architecture:
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                  CONSUMPTION LAYER                      │
-│   ZFLEET_C_Vehicle (Projection View + BDEF)             │
-│   ZFLEET_C_MaintLog (Projection View + BDEF)            │
+│   ZFLEET_C_VEHICLE (Projection View + BDEF)             │
+│   ZFLEET_C_MAINTLOG (Projection View + BDEF)            │
 │   Metadata Extensions (UI Annotations)                  │
 │   Value Help Views (ZFLEET_I_VEHSTATUS_VH, e.t.c)       │
 ├─────────────────────────────────────────────────────────┤
@@ -75,14 +75,14 @@ The application follows the standard RAP layered architecture:
 │      Actions, Instance Feature Control                  │
 ├─────────────────────────────────────────────────────────┤
 │                  INTERFACE (BO) LAYER                   │
-│   ZFLEET_R_Vehicle (Root Interface View + BDEF)         │
+│   ZFLEET_R_VEHICLE (Root Interface View + BDEF)         │
 │   ZFLEET_R_AMAINTLOG (Child Interface View + BDEF)      │
 ├─────────────────────────────────────────────────────────┤
 │                  DATABASE LAYER                         │
-│   zfleet_avhcle (Transparent Table)                     │
-│   zfleet_amaintlog (Transparent Table)                  │
-│   zfleet_dvhicle (Draft Table)                          │
-│   zfleet_dmaintlog (Draft Table)                        │
+│   ZFLEET_AVHCLE (Transparent Table)                     │
+│   ZFLEET_AMAINTLOG (Transparent Table)                  │
+│   ZFLEET_DVHICLE (Draft Table)                          │
+│   ZFLEET_DMAINTLOG (Draft Table)                        │
 │   Domains → Data Elements → Table Fields                │
 ├─────────────────────────────────────────────────────────┤
 │                  SERVICE LAYER                          │
@@ -161,8 +161,8 @@ The root persistence table. Each row represents one vehicle or machine in the fl
 | Field | Type / Data Element | Description |
 |---|---|---|
 | `CLIENT` | `abap.clnt` | SAP client (implicit key) |
-| `VEHICLE_UUID` | `sysuuid_x16` | Technical UUID primary key — managed by RAP framework |
-| `VEHICLE_ID` | `ZVEH_ID` | Human-readable semantic ID (e.g. `VEH-000001`) — set by early numbering |
+| `VEHICLE_UUID` | `sysuuid_x16` | Technical UUID primary key — set by early numbering |
+| `VEHICLE_ID` | `ZVEH_ID` | Human-readable semantic ID — set by determination |
 | `DESCRIPTION` | `ZVEH_DESC` | Full vehicle description |
 | `VEHICLE_TYPE` | `ZVEH_TYPE` | Classification: Van, Truck, Bus, SUV, Pickup, Machine |
 | `LICENSE_PLATE` | `ZVEH_PLATE` | Registration plate number |
@@ -179,9 +179,9 @@ The child persistence table. Each row is one maintenance event linked to a paren
 | Field | Type / Data Element | Description |
 |---|---|---|
 | `CLIENT` | `abap.clnt` | SAP client |
-| `LOG_UUID` | `sysuuid_x16` | Technical UUID primary key — managed by RAP framework |
-| `VEHICLE_UUID` | `sysuuid_x16` | Foreign key to parent `ZVEHICLE` |
-| `LOG_ID` | `ZLOG_ID` | Human-readable semantic ID (e.g. `LOG-000001`) — set by early numbering |
+| `LOG_UUID` | `sysuuid_x16` | Technical UUID primary key — set by early numbering |
+| `VEHICLE_UUID` | `sysuuid_x16` | Foreign key to parent `ZFLEET_AVHCLE` |
+| `LOG_ID` | `ZLOG_ID` | Human-readable semantic ID — set by determination |
 | `LOG_TYPE` | `ZLOG_TYPE` | Type of event: REPAIR, SERVICE, INSPECTION |
 | `DESCRIPTION` | `ZLOG_DESC` | Detailed description of the maintenance work |
 | `STATUS` | `ZLOG_STATUS` | Current log status: OPEN, INPROGRESS, COMPLETED |
@@ -236,7 +236,7 @@ Interface views form the **Business Object (BO) layer** and define the data mode
  
 - Selects from `ZFLEET_AMAINTLOG`
 - Declared as `define view entity` (not root)
-- Contains an **association to parent** `Zfleet_R_Vehicle` via `_Vehicle`
+- Contains an **association to parent** `ZFLEET_R_VEHICLE` via `_Vehicle`
 - Is locked and authorized through its parent (root) entity
 ---
  
@@ -254,8 +254,8 @@ Projection views form the **consumption layer** and shape the BO for a specific 
 
 #### `ZFLEET_C_MAINTLOG` — Maintenance Log Projection View
  
-- Projects from `Zfleet_R_AmaintLog`
-- Redirects the `_Vehicle` association back to the parent projection `Zfleet_C_Vehicle`
+- Projects from `ZFLEET_A_AMAINTLOG`
+- Redirects the `_Vehicle` association back to the parent projection `ZFLEET_C_VEHICLE`
 - Annotated with `@Consumption.valueHelpDefinition` on `Status` pointing to `ZFLEET_I_LOGSTATUS_VH`
 ---
  
