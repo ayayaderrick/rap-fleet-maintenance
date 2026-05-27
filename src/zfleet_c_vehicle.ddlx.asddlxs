@@ -1,8 +1,8 @@
 @Metadata.layer: #CORE
 @UI.headerInfo.title.type: #STANDARD
-@UI.headerInfo.title.value: 'VehicleID'
+@UI.headerInfo.title.value: 'LicensePlate'
 @UI.headerInfo.description.type: #STANDARD
-@UI.headerInfo.description.value: 'LicensePlate'
+@UI.headerInfo.description.value: 'VehicleID'
 annotate view ZFLEET_C_VEHICLE with
 {
   @UI.facet: [ {

@@ -5,7 +5,6 @@
 @UI.headerInfo.description.value: 'LogID'
 annotate view ZFLEET_C_MAINTLOG with
 {
-  @EndUserText.label: 'LogUUID'
   @UI.facet: [ {
     label: 'Log Details',
     id: 'LogInfo',
