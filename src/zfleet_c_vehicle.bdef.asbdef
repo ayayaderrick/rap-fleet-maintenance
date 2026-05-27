@@ -1,0 +1,35 @@
+projection implementation in class ZFLEET_BP_C_VEHICLE unique;
+strict ( 2 );
+extensible;
+use draft;
+use side effects;
+define behavior for ZFLEET_C_VEHICLE alias Vehicle
+extensible
+use etag
+{
+  use create;
+  use update;
+  use delete;
+
+  use action Edit;
+  use action Activate;
+  use action Discard;
+  use action Resume;
+  use action Prepare;
+
+  use action sendToRepair;
+  use action returnToService;
+  use action retireVehicle;
+
+  use association _Logs{create; with draft;}
+
+}
+
+define behavior for ZFLEET_C_MAINTLOG alias Logs
+{
+    use update;
+    use delete;
+
+    use association _Vehicle{with draft;}
+
+}

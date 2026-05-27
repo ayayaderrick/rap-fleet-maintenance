@@ -1,0 +1,6 @@
+@EndUserText.label: 'ZFLEET_C_VEHICLE'
+@MappingRole: true
+define role ZFLEET_C_VEHICLE {
+  grant select on ZFLEET_C_VEHICLE
+  where INHERITING CONDITIONS FROM ENTITY ZFLEET_R_VEHICLE REPLACING { ROOT WITH _BaseEntity };
+}

@@ -1,0 +1,138 @@
+managed implementation in class ZFLEET_BP_VEHICLE unique;
+strict ( 2 );
+with draft;
+extensible;
+define behavior for ZFLEET_R_VEHICLE alias Vehicle
+persistent table ZFLEET_AVHCLE
+extensible
+draft table ZFLEET_DVHICLE
+etag master LocalLastChangedAt
+lock master total etag LastChangedAt
+authorization master( global )
+early numbering
+{
+  field ( readonly )
+   VehicleUUID,
+   CreatedBy,
+   CreatedAt,
+   LocalLastChangedBy,
+   LocalLastChangedAt,
+   LastChangedAt;
+
+    field (readonly)
+    VehicleID;
+
+   field (mandatory)
+   Description,
+   VehicleType,
+   LicensePlate,
+   AcquisitionDate;
+
+  create;
+  update (features: instance);
+  delete (features: instance);
+
+  draft action Activate optimized;
+  draft action Discard;
+  draft action (features: instance) Edit;
+  draft action Resume;
+  draft determine action Prepare{
+    validation validateStatusTransition;
+    validation validateRetireConditions;
+    validation validateRequiredFields;
+    validation Logs~validateLogDates;
+    validation Logs~validateCompletedLog;
+  }
+
+  determination setVehicleID on modify {create;}
+  determination setStatusCriticality on modify {field Status;}
+  determination setInitialStatus on modify {create;}
+
+  action (features: instance) sendToRepair result [1] $self;
+  action (features: instance) returnToService result [1] $self;
+  action (features: instance) retireVehicle result [1] $self;
+
+  validation validateStatusTransition on save {field Status;}
+  validation validateRetireConditions on save {field Status;}
+  validation validateRequiredFields on save {create; update;}
+
+
+
+  mapping for ZFLEET_AVHCLE corresponding extensible
+  {
+    VehicleUUID = VEHICLE_UUID;
+    VehicleID = VEHICLE_ID;
+    Description = DESCRIPTION;
+    VehicleType = VEHICLE_TYPE;
+    LicensePlate = LICENSE_PLATE;
+    Status = STATUS;
+    StatusCriticality = STATUS_CRITICALITY;
+    AcquisitionDate = ACQUISITION_DATE;
+    Mileage = MILEAGE;
+    DistanceUnit = DISTANCE_UNIT;
+    ResponsiblePerson = RESPONSIBLE_PERSON;
+    CreatedBy = CREATED_BY;
+    CreatedAt = CREATED_AT;
+    LocalLastChangedBy = LOCAL_LAST_CHANGED_BY;
+    LocalLastChangedAt = LOCAL_LAST_CHANGED_AT;
+    LastChangedAt = LAST_CHANGED_AT;
+  }
+
+  association _Logs {create; with draft;}
+
+}
+
+define behavior for ZFLEET_R_AMAINTLOG alias Logs
+persistent table ZFLEET_AMAINTLOG
+extensible
+draft table ZFLEET_DMAINTLOG
+etag master LocalLastChangedAt
+lock dependent by _Vehicle
+authorization dependent by _Vehicle
+early numbering
+{
+  field ( readonly )
+   LogUUID,
+   VehicleUUID,
+   CreatedBy,
+   CreatedAt,
+   LocalLastChangedBy,
+   LocalLastChangedAt,
+   LastChangedAt;
+
+  field ( readonly )
+   LogID;
+
+  update (features: instance);
+  delete (features: instance);
+
+
+  determination setLogID on modify {create;}
+  determination setDefaultLogStatus on modify {create;}
+
+  validation validateLogDates on save {create; field StartDate; field EndDate;}
+  validation validateCompletedLog on save {create; field Status, EndDate, Cost;}
+
+  mapping for ZFLEET_AMAINTLOG corresponding extensible
+  {
+    LogUUID = LOG_UUID;
+    VehicleUUID = VEHICLE_UUID;
+    LogID = LOG_ID;
+    LogType = LOG_TYPE;
+    Description = DESCRIPTION;
+    Status = STATUS;
+    AssignedTechnician = ASSIGNED_TECHNICIAN;
+    StartDate = START_DATE;
+    EndDate = END_DATE;
+    Cost = COST;
+    CurrencyCode = CURRENCY_CODE;
+    CreatedBy = CREATED_BY;
+    CreatedAt = CREATED_AT;
+    LocalLastChangedBy = LOCAL_LAST_CHANGED_BY;
+    LocalLastChangedAt = LOCAL_LAST_CHANGED_AT;
+    LastChangedAt = LAST_CHANGED_AT;
+  }
+
+  association _Vehicle {with draft;}
+
+}

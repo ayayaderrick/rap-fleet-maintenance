@@ -1,0 +1,10 @@
+{
+  "formatVersion": "1",
+  "header": {
+    "description": "SAP Obejct Node Type ZFLEET_AMAINTLOG",
+    "originalLanguage": "en",
+    "abapLanguageVersion": "cloudDevelopment"
+  },
+  "name": "ZFLEET_AMAINTLOG",
+  "sapObjectType": "ZFLEET_AMAINTLOG"
+}

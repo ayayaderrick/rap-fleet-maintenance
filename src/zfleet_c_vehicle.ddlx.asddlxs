@@ -1,0 +1,107 @@
+@Metadata.layer: #CORE
+@UI.headerInfo.title.type: #STANDARD
+@UI.headerInfo.title.value: 'VehicleID'
+@UI.headerInfo.description.type: #STANDARD
+@UI.headerInfo.description.value: 'LicensePlate'
+annotate view ZFLEET_C_VEHICLE with
+{
+  @UI.facet: [ {
+    label: 'General Information',
+    id: 'GeneralInfo',
+    purpose: #STANDARD,
+    position: 10 ,
+    type: #COLLECTION
+  },
+  {
+    id: 'VehicleData',
+    type: #IDENTIFICATION_REFERENCE,
+    parentId: 'GeneralInfo',
+    label: 'Vehicle Details',
+    position: 10
+  },
+  {
+    id: 'MaintLogs',
+    type: #LINEITEM_REFERENCE,
+    label: 'Maintenance Logs',
+    position: 20,
+    targetElement: '_Logs'
+  }
+   ]
+
+  @UI.identification: [ {
+    position: 10, label: 'Vehicle ID'
+  } ]
+  @UI.lineItem: [ {
+    position: 10, label: 'Vehicle ID', importance: #HIGH
+  } ]
+  @UI.selectionField: [ {
+    position: 10
+  } ]
+  @Consumption.valueHelpDefinition: [{ entity: { name: 'ZFLEET_I_VEHICLE_VH', element: 'VehicleID' } }]
+  VehicleID;
+
+  @UI.identification: [ {
+    position: 20, label: 'Vehicle Description'
+  } ]
+  @UI.lineItem: [ {
+    position: 20, label: 'Vehicle Description', importance: #HIGH
+  } ]
+  Description;
+
+  @UI.identification: [ {
+    position: 30
+  } ]
+  @UI.lineItem: [ {
+    position: 30, importance: #HIGH
+  } ]
+  VehicleType;
+
+  @UI.identification: [ {
+    position: 40
+  } ]
+  @UI.lineItem: [ {
+    position: 40, importance: #HIGH
+  } ]
+  LicensePlate;
+
+  @UI.identification: [ { position: 50  },
+    { type: #FOR_ACTION, dataAction: 'sendToRepair',    label: 'Send to Repair' },
+      { type: #FOR_ACTION, dataAction: 'returnToService', label: 'Return to Service' },
+      { type: #FOR_ACTION, dataAction: 'retireVehicle',   label: 'Retire Vehicle' }
+   ]
+  @UI.lineItem: [ {
+    position: 50,
+    criticality: 'StatusCriticality',
+    label: 'Status',
+    importance: #HIGH
+  },
+      { type: #FOR_ACTION, dataAction: 'sendToRepair',    label: 'Send to Repair' },
+      { type: #FOR_ACTION, dataAction: 'returnToService', label: 'Return to Service' },
+      { type: #FOR_ACTION, dataAction: 'retireVehicle',   label: 'Retire Vehicle' }
+   ]
+  @UI.dataPoint: { qualifier: 'Status', criticality: 'StatusCriticality' }
+  @UI.selectionField: [ {
+    position: 20
+  } ]
+  @Consumption.filter: { selectionType: #SINGLE }
+  Status;
+
+  @UI.identification: [ {
+    position: 60
+  } ]
+  AcquisitionDate;
+
+  @UI.identification: [ {
+    position: 70
+  } ]
+  @UI.lineItem: [ {
+    position: 60, importance: #MEDIUM
+  } ]
+  Mileage;
+
+  @UI.identification: [ {
+    position: 80
+  } ]
+  ResponsiblePerson;
+
+}

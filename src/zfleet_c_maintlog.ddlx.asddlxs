@@ -1,0 +1,77 @@
+@Metadata.layer: #CORE
+@UI.headerInfo.title.type: #STANDARD
+@UI.headerInfo.title.value: 'LogID'
+@UI.headerInfo.description.type: #STANDARD
+@UI.headerInfo.description.value: 'LogID'
+annotate view ZFLEET_C_MAINTLOG with
+{
+  @EndUserText.label: 'LogUUID'
+  @UI.facet: [ {
+    label: 'Log Details',
+    id: 'LogInfo',
+    purpose: #STANDARD,
+    position: 10 ,
+    type: #IDENTIFICATION_REFERENCE
+  } ]
+
+
+  @UI.identification: [ {
+    position: 10
+  } ]
+  @UI.lineItem: [ {
+    position: 10
+  } ]
+  LogID;
+
+  @UI.identification: [ {
+    position: 30
+  } ]
+  @UI.lineItem: [ {
+    position: 20
+  } ]
+  LogType;
+
+  @UI.identification: [ {
+    position: 50
+  } ]
+  @UI.lineItem: [ {
+    position: 30
+  } ]
+  Description;
+
+  @UI.identification: [ {
+    position: 70
+  } ]
+  @UI.lineItem: [ {
+    position: 40
+  } ]
+  @UI.selectionField: [ {
+    position: 10
+  } ]
+  Status;
+
+  @UI.identification: [ {
+    position: 20
+  } ]
+  AssignedTechnician;
+
+  @UI.identification: [ {
+    position: 40
+  } ]
+  StartDate;
+
+  @UI.identification: [ {
+    position: 60
+  } ]
+  EndDate;
+
+  @UI.identification: [ {
+    position: 80
+  } ]
+  @UI.lineItem: [ {
+    position: 50
+  } ]
+  Cost;
+
+
+}

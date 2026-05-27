@@ -1,0 +1,13 @@
+@EndUserText: {
+  label: 'Service Definition for ZFLEET_C_VEHICLE'
+}
+@ObjectModel: {
+  leadingEntity: {
+    name: 'ZFLEET_C_VEHICLE'
+  }
+}
+define service ZFLEET_UI_VEHICLE
+  provider contracts odata_v4_ui {
+  expose ZFLEET_C_VEHICLE  as Vehicle;
+  expose ZFLEET_C_MAINTLOG as Logs;
+}

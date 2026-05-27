@@ -1,0 +1,6 @@
+@EndUserText.label: 'ZFLEET_R_AMAINTLOG'
+@MappingRole: true
+define role ZFLEET_R_AMAINTLOG {
+  grant select on ZFLEET_R_AMAINTLOG
+  where TRUE;
+}
